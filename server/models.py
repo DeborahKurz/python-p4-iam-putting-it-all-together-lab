@@ -14,8 +14,13 @@ class User(db.Model, SerializerMixin):
     bio = db.Column(db.String)
 
     recipes = db.relationship('Recipe', back_populates='user', cascade='all, delete-orphan')
-    
 
+    @validates('username')
+    def validate_username(self, key, username):
+        if not username:
+            raise ValueError("Failed username validation")
+        return username
+    
 class Recipe(db.Model, SerializerMixin):
     __tablename__ = 'recipes'
 
